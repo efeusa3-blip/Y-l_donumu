@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana Özel Sürpriz ❤️</title>
+    <!-- Tailwind CSS CDN'i --><script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Sayfanın kaydırılmasını engeller, gül animasyonu için önemli */
+        }
+        #reason-text {
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        /* --- YENİ GÜL AÇILIŞ ANİMASYONU --- */
+
+        /* Tam ekranı kaplayan, ilk başta içeriği gizleyen katman */
+        /* --- ESKİ #rose-overlay stilleri kaldırıldı --- */
+
+        /* --- YENİ GÜL YAPRAĞI ANİMASYONU --- */
+        #petal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 100;
+            /* Animasyon bittiğinde gizle */
+            animation: hideContainer 0.1s forwards;
+            animation-delay: 3.0s; /* Petal animasyonundan (2.5s) sonra */
+        }
+
+        @keyframes hideContainer {
+            to {
+                visibility: hidden;
+                display: none;
+            }
+        }
+
+        .petal {
+            position: absolute;
+            width: 50vw; /* Ekranın yarısı */
+            height: 50vh; /* Ekranın yarısı */
+            background: linear-gradient(to bottom right, #4a044e, #83038b, #b903bb); /* Koyu mor gül tonları */
+            animation-duration: 2.5s; /* Animasyon süresi */
+            animation-fill-mode: forwards; /* Bittiği yerde kalsın */
+            animation-timing-function: cubic-bezier(0.7, 0, 0.3, 1); /* Yavaş başlayıp hızlansın */
+            animation-delay: 0.5s; /* Sayfa yüklenince bekle */
+        }
+
+        .petal-top-left {
+            top: 0;
+            left: 0;
+            transform-origin: top left;
+            animation-name: openTopLeft;
+        }
+
+        .petal-top-right {
+            top: 0;
+            right: 0;
+            transform-origin: top right;
+            animation-name: openTopRight;
+        }
+
+        .petal-bottom-left {
+            bottom: 0;
+            left: 0;
+            transform-origin: bottom left;
+            animation-name: openBottomLeft;
+        }
+
+        .petal-bottom-right {
+            bottom: 0;
+            right: 0;
+            transform-origin: bottom right;
+            animation-name: openBottomRight;
+        }
+
+        /* Dört köşe için açılma animasyonları */
+        @keyframes openTopLeft {
+            from { transform: translate(0, 0) rotate(0); }
+            to { transform: translate(-100%, -100%) rotate(-30deg); }
+        }
+        @keyframes openTopRight {
+            from { transform: translate(0, 0) rotate(0); }
+            to { transform: translate(100%, -100%) rotate(30deg); }
+        }
+        @keyframes openBottomLeft {
+            from { transform: translate(0, 0) rotate(0); }
+            to { transform: translate(-100%, 100%) rotate(30deg); }
+        }
+        @keyframes openBottomRight {
+            from { transform: translate(0, 0) rotate(0); }
+            to { transform: translate(100%, 100%) rotate(-30deg); }
+        }
+        /* --- GÜL YAPRAĞI ANİMASYONU BİTİŞİ --- */
+
+        /* Gül animasyonu için anahtar kareler */
+        /* --- ESKİ @keyframes roseBloom kaldırıldı --- */
+
+        /* İçeriğin gül animasyonundan sonra görünmesi için fade-in */
+        @keyframes contentFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-visible {
+            opacity: 0; /* Başlangıçta içeriği gizli tut */
+            animation: contentFadeIn 1.5s ease-out forwards;
+            animation-delay: 2.5s; /* GÜNCELLENDİ: Gül animasyonu biterken içerik gelsin (önce 3.5s idi) */
+        }
+
+        /* --- YENİ EKLENTİLER İÇİN STİLLER --- */
+
+        /* Kişisel Not Modalı (Pop-up) */
+        #note-modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #note-modal-content {
+            transition: transform 0.3s ease;
+        }
+
+        /* Müzik Düğmesi */
+        /* --- KALDIRILDI: #music-toggle stili kaldırıldı --- */
+        
+        /* --- STİL BİTİŞİ --- */
+
+        /* Eski kart açılış animasyonu (artık içerik fade-in tarafından kontrol edilecek) */
+        /* Bu kısmı silebiliriz veya yeni content-visible ile birleştirebiliriz.
+           Şimdilik content-visible daha genel bir etki yaratacak. */
+        /*
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .card-animate {
+            animation: cardFadeIn 1.0s ease-out;
+            animation-delay: 0.2s;
+            animation-fill-mode: forwards;
+            opacity: 0;
+        }
+        */
+        /* --- GÜL ANİMASYONU BİTİŞİ --- */
+
+        /* YENİ: Devre dışı bırakılmış düğme stili */
+        /* --- KALDIRILDI: button:disabled stili kaldırıldı --- */
+
+        /* Gül efekti için görsel ipucu - animasyon anında gülümsü bir görüntü */
+        /* --- ESKİ .rose-icon ve @keyframes pulse kaldırıldı --- */
+    </style>
+</head>
+<body class="bg-gradient-to-br from-rose-200 via-pink-300 to-purple-400">
+
+    <!-- --- YENİ: GÜL YAPRAĞI AÇILIŞ ANİMASYONU KATMANI --- -->
+    <div id="petal-container">
+        <div class="petal petal-top-left"></div>
+        <div class="petal petal-top-right"></div>
+        <div class="petal petal-bottom-left"></div>
+        <div class="petal petal-bottom-right"></div>
+    </div>
+    <!-- --- GÜL KATMANI BİTİŞİ --- -->
+    <main class="flex items-center justify-center min-h-screen p-4 content-visible">
+        
+        <!-- Ana Sürpriz Kartı (artık "card-animate" yerine "content-visible" genel animasyonu kullanıyor) --><div class="bg-white rounded-2xl shadow-2xl p-8 max-w-lg w-full text-center transform transition-all hover:scale-105">
+            
+            <!-- 
+                *** FOTOĞRAF DEĞİŞTİRME ALANI ***
+                
+                Burası şu an örnek bir resim gösteriyor. Kendi fotoğrafınızı koymak için:
+                1. 'src' tırnakları içindeki linki silin.
+                2. Kendi fotoğrafınızın dosya adını (örn: "biz.jpg") veya internet linkini yapıştırın.
+                
+                Örnek: src="bizim_fotograf.jpg"
+            -->
+            <img 
+                src="https://placehold.co/150x150/f472b6/ffffff?text=Biz" 
+                alt="İkimiz" 
+                class="w-32 h-32 rounded-full mx-auto border-4 border-pink-300 shadow-lg object-cover"
+            >
+            
+            <!-- 
+                KİŞİSELLEŞTİRME:
+                [Onun Adı] kısmını sevgilinizin adıyla değiştirin.
+            -->
+            <h1 class="mt-6 text-3xl font-bold text-gray-800">
+                İyi ki Varsın, [Onun Adı]!
+            </h1>
+            
+            <p class="mt-2 text-lg text-gray-600">Seni sevmemin nedenlerinden sadece birkaçı...</p>
+            
+            <div class="mt-8 min-h-[100px] flex items-center justify-center p-6 bg-gray-100 rounded-lg shadow-inner">
+                <p id="reason-text" class="text-xl font-medium text-gray-700 italic">
+                    Bana bir neden göstermek için tıkla!
+                </p>
+            </div>
+
+            <button id="new-reason-btn" class="mt-8 w-full bg-pink-500 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg transition transform hover:bg-pink-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-opacity-75">
+                Yeni Bir Neden Göster ❤️
+            </button>
+            
+            <!-- YENİ: KİŞİSEL NOT DÜĞMESİ -->
+            <button id="open-note-btn" class="mt-4 w-full bg-indigo-500 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg transition transform hover:bg-indigo-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75">
+                Sana Özel Notum 💌
+            </button>
+            
+        </div>
+    </main>
+
+    <!-- YENİ: KİŞİSEL NOT İÇİN MODAL (POP-UP) -->
+    <div id="note-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 hidden opacity-0 visibility-hidden">
+        <div id="note-modal-content" class="bg-white rounded-2xl shadow-2xl p-8 max-w-lg w-full text-left transform scale-95">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Canım Sevgilime...</h2>
+            
+            <!-- 
+                KİŞİSELLEŞTİRME:
+                Aşağıdaki <p> etiketleri arasına sevgilinize özel uzun notunuzu yazın.
+                İstediğiniz kadar <p> etiketi ekleyebilirsiniz.
+            -->
+            <div class="text-gray-600 space-y-4 max-h-60 overflow-y-auto pr-2">
+                <p>Seninle tanıştığım gün, hayatımın en güzel yolculuğuna adım attığımı bilmiyordum. Geçen zaman içinde sadece sevgilim değil, en yakın arkadaşım, en güvenli limanım oldun.</p>
+                
+                <p>Birlikte güldüğümüz, bazen zorlandığımız ama el ele verip her şeyin üstesinden geldiğimiz her an benim için paha biçilemez. Hayatıma kattığın tüm renkler ve huzur için sana minnettarım.</p>
+
+                <p>Geriye baktığımda harika anılar, ileriye baktığımda ise seninle geçecek heyecan dolu bir ömür görüyorum. İyi ki varsın, iyi ki biziz. Seni her geçen gün daha çok seviyorum.</p>
+
+                <p class="font-bold text-pink-500 text-right mt-4">- Seni Çok Seven [Adın]</p>
+            </div>
+            
+            <button id="close-note-btn" class="mt-6 w-full bg-pink-500 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg transition transform hover:bg-pink-600 hover:scale-105">
+                Kapat
+            </button>
+        </div>
+    </div>
+    <!-- MODAL BİTİŞİ -->
+
+
+    <!-- YENİ: ARKA PLAN MÜZİĞİ -->
+    <!-- --- KALDIRILDI: <audio> ve <button id="music-toggle"> kaldırıldı --- -->
+    <!-- MÜZİK BİTİŞİ -->
+
+
+    <script>
+        const reasons = [
+            "Gülüşünle içimi ısıtman.",
+            "Bana her zaman destek olman.",
+            "En komik anlarda bile yanımda olman.",
+            "Bana [Ona Özel Bir Şey] yapmayı öğretmen.",
+            "Gözlerinin içine baktığımda hissettiğim huzur.",
+            "Birlikte [Yapmaktan Hoşlandığınız Bir Şey] yapmayı çok seviyorum.",
+            "Her sabah seninle uyanma düşüncesi.",
+            "En zor anlarımda bile beni güldürmeyi başarman.",
+            "Bana kattığın her şey için...",
+            "Sadece sen olduğun için."
+        ];
+        // --- KİŞİSELLEŞTİRME ALANI BİTİŞİ ---
+
+        const reasonText = document.getElementById('reason-text');
+        const reasonBtn = document.getElementById('new-reason-btn');
+
+        let usedIndexes = [];
+
+        function showNewReason() {
+            if (usedIndexes.length === reasons.length) {
+                usedIndexes = [];
+            }
+
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * reasons.length);
+            } while (usedIndexes.includes(randomIndex));
+
+            usedIndexes.push(randomIndex);
+            
+            const randomReason = reasons[randomIndex];
+
+            reasonText.style.opacity = 0;
+
+            setTimeout(() => {
+                reasonText.textContent = randomReason;
+                reasonText.style.opacity = 1;
+            }, 400); 
+        }
+
+        reasonBtn.addEventListener('click', showNewReason);
+
+
+        // --- YENİ EKLENEN KODLAR (MODAL VE MÜZİK) ---
+
+        // Modal (Kişisel Not) Elemanları
+        const modal = document.getElementById('note-modal');
+        const modalContent = document.getElementById('note-modal-content');
+        const openNoteBtn = document.getElementById('open-note-btn');
+        const closeNoteBtn = document.getElementById('close-note-btn');
+
+        // Müzik Elemanları
+        /* --- KALDIRILDI: musicToggle, bgMusic, isPlaying değişkenleri kaldırıldı --- */
+
+        // Modal Açma
+        openNoteBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'visibility-hidden');
+                modalContent.classList.remove('scale-95');
+            }, 10); // Küçük bir gecikme animasyonun çalışması için
+        });
+
+        // Modal Kapatma
+        function closeModal() {
+            modalContent.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'visibility-hidden');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // transition süresi kadar bekle
+        }
+
+        closeNoteBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            // Eğer modalın arka planına (overlay) tıklanırsa kapat
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Müzik Kontrolü
+        /* --- KALDIRILDI: toggleMusic fonksiyonu kaldırıldı --- */
+
+        /* --- KALDIRILDI: musicToggle event listener'ı kaldırıldı --- */
+
+        // Sayfa yüklendiğinde (veya petal animasyonu bittiğinde) müziği başlatmayı dene
+        /* --- KALDIRILDI: Müzik başlatma setTimeout'u kaldırıldı --- */
+
+
+        // --- YENİ EKLENEN KOD (SCROLL İÇİN) ---
+
+        // Gül animasyonu bittikten sonra (3.0s animasyon + 0.1s gizlenme)
+        // body'deki overflow:hidden'ı kaldırarak scroll'u etkinleştir.
+        setTimeout(() => {
+            document.body.style.overflow = 'auto';
+        }, 3100); // Petal container'ın gizlenme animasyonundan (3.0s) hemen sonra.
+
+    </script>
+
+</body>
+</html>
